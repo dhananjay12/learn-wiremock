@@ -1,0 +1,159 @@
+openapi: 3.0.1
+info:
+  title: Movie Service API
+  version: 1.0.0
+paths:
+  /movieservice/v1/allMovies:
+    get:
+      summary: Get all movies
+      responses:
+        '200':
+          description: A list of all movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+
+  /movieservice/v1/movie/{id}:
+    get:
+      summary: Get a movie by ID
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the movie
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The movie with the specified ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+    put:
+      summary: Update a movie
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the movie
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated movie details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '200':
+          description: Movie updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+    delete:
+      summary: Delete a movie
+      parameters:
+        - name: id
+          in: path
+          description: The ID of the movie
+          required: true
+          schema:
+              type: string
+      responses:
+        '204':
+          description: Movie deleted successfully
+        '404':
+          description: Movie not found
+
+  /movieservice/v1/movieName:
+    get:
+      summary: Get a movie by name
+      parameters:
+        - name: name
+          in: query
+          description: The name of the movie
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The movie with the specified name
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+
+  /movieservice/v1/movieYear:
+    get:
+      summary: Get movies by year
+      parameters:
+        - name: year
+          in: query
+          description: The release year of the movie
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of movies released in the specified year
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+        '404':
+          description: No movies found for the specified year
+
+  /movieservice/v1/movie:
+    post:
+      summary: Add a new movie
+      requestBody:
+        description: New movie details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Movie'
+      responses:
+        '201':
+          description: Movie added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        movie_id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        cast:
+          type: string
+        year:
+          type: integer
+          format: int32
+        release_date:
+          type: string
+          format: date
